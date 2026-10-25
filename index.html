@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>PHONISTIC — Smart shopping. Simple choice.</title>
+  <meta name="description" content="Shop phones and everyday tech accessories at PHONISTIC. Smart shopping. Simple choice.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="announcement">
+    Smart shopping. Simple choice.
+    <span>Delivery available across Nigeria</span>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="PHONISTIC home">
+      <span class="brand-mark">P</span>
+      <span>PHONISTIC<small>Smart shopping. Simple choice.</small></span>
+    </a>
+
+    <form id="search-form" class="search">
+      <input id="search-input" type="search"
+        placeholder="Search iPhones & accessories"
+        aria-label="Search products">
+      <button aria-label="Search">⌕</button>
+    </form>
+
+    <div class="header-actions">
+      <button id="wishlist-toggle" class="icon-button" aria-label="Show wishlist">
+        ♡ <span class="desktop-label">Wishlist</span>
+      </button>
+      <button id="cart-open" class="cart-button">
+        🛒 <span class="desktop-label">Cart</span>
+        <b id="cart-count">0</b>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">TECH THAT FITS YOUR LIFE</p>
+        <h1>Upgrade your<br><em>everyday.</em></h1>
+        <p>Discover phones and accessories chosen for how you live, work and connect.</p>
+        <a href="#shop" class="primary-button">
+          Shop the collection <span>→</span>
+        </a>
+        <div class="hero-notes">
+          <span>✓ Carefully selected tech</span>
+          <span>✓ Prices in Nigerian naira</span>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-label="Featured smartphone illustration">
+        <div class="glow"></div>
+        <div class="phone phone-back">
+          <div class="camera-row"><i></i><i></i><i></i></div>
+        </div>
+        <div class="phone phone-front">
+          <div class="screen-island"></div>
+          <div class="screen-shape"></div>
+          <div class="screen-caption">PHONISTIC</div>
+        </div>
+        <div class="float-card">
+          <span>✦</span>
+          <div><b>Good tech.</b><small>Better everyday.</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-row">
+      <div>🚚 <span><b>Delivery options</b><small>Across Nigeria</small></span></div>
+      <div>🔒 <span><b>Secure ordering</b><small>Your details stay protected</small></span></div>
+      <div>💬 <span><b>Helpful support</b><small>We're here to help</small></span></div>
+    </section>
+
+    <section id="shop" class="shop-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FIND YOUR NEXT FAVOURITE</p>
+          <h2>Shop the collection</h2>
+        </div>
+        <p id="product-status" class="status">Loading products…</p>
+      </div>
+
+      <div id="categories" class="category-list">
+        <button class="category active" data-category="All">All products</button>
+        <button class="category" data-category="iPhones">iPhones</button>
+        <button class="category" data-category="AirPods">AirPods</button>
+        <button class="category" data-category="Cases">Cases</button>
+        <button class="category" data-category="Chargers">Chargers</button>
+        <button class="category" data-category="Power Banks">Power banks</button>
+        <button class="category" data-category="Accessories">Accessories</button>
+      </div>
+
+      <div id="product-grid" class="product-grid" aria-live="polite"></div>
+
+      <div id="empty-state" class="empty-state hidden">
+        <div>⌕</div>
+        <h3>No products found</h3>
+        <p>Try another search or category.</p>
+        <button id="clear-filters" class="secondary-button">Clear filters</button>
+      </div>
+    </section>
+
+    <section class="bottom-banner">
+      <div>
+        <p class="eyebrow">READY WHEN YOU ARE</p>
+        <h2>Your next upgrade starts here.</h2>
+        <p>Browse the collection and place your order in a few simple steps.</p>
+      </div>
+      <a href="#shop" class="light-button">Explore products →</a>
+    </section>
+  </main>
+
+  <footer>
+    <a class="footer-brand" href="#">PHONISTIC</a>
+    <span>Smart shopping. Simple choice.</span>
+    <span>© <span id="year"></span> PHONISTIC</span>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="overlay" class="overlay hidden"></div>
+
+  <aside id="cart-drawer" class="drawer" aria-label="Shopping cart" aria-hidden="true">
+    <div class="drawer-header">
+      <div>
+        <p class="eyebrow">YOUR BAG</p>
+        <h2>Your cart <span id="drawer-count">(0)</span></h2>
+      </div>
+      <button class="close-button" data-close aria-label="Close cart">×</button>
+    </div>
+
+    <div id="cart-items" class="cart-items"></div>
+
+    <div id="cart-empty" class="cart-empty">
+      <span>🛍️</span>
+      <h3>Your cart is waiting</h3>
+      <p>Add something you love to get started.</p>
+      <button class="primary-button" data-close>Start shopping</button>
+    </div>
+
+    <div id="cart-footer" class="cart-footer hidden">
+      <div class="subtotal"><span>Subtotal</span><b id="cart-subtotal">₦0</b></div>
+      <p>Delivery fees, if any, are confirmed with your order.</p>
+      <button id="checkout-open" class="primary-button full-width">
+        Continue to checkout →
+      </button>
+    </div>
+  </aside>
+
+  <section id="checkout-modal" class="modal hidden"
+    role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+    <div class="modal-header">
+      <div>
+        <p class="eyebrow">ALMOST THERE</p>
+        <h2 id="checkout-title">Checkout</h2>
+      </div>
+      <button class="close-button" data-close aria-label="Close checkout">×</button>
+    </div>
+
+    <form id="checkout-form" class="checkout-form">
+      <div class="form-grid">
+        <label>Full name
+          <input name="customer_name" required autocomplete="name" placeholder="Your full name">
+        </label>
+        <label>Phone number
+          <input name="phone" required type="tel" autocomplete="tel" placeholder="e.g. 08012345678">
+        </label>
+      </div>
+
+      <label>Email address <span class="optional">(optional)</span>
+        <input name="email" type="email" autocomplete="email" placeholder="you@example.com">
+      </label>
+
+      <label>Delivery address
+        <textarea name="address" required rows="3" autocomplete="street-address"
+          placeholder="House number, street, area"></textarea>
+      </label>
+
+      <div class="form-grid">
+        <label>State
+          <input name="state" required placeholder="e.g. Kaduna">
+        </label>
+        <label>City / town
+          <input name="city" required placeholder="e.g. Kaduna">
+        </label>
+      </div>
+
+      <label>Order note <span class="optional">(optional)</span>
+        <textarea name="note" rows="2" placeholder="Any delivery instructions?"></textarea>
+      </label>
+
+      <div class="checkout-total">
+        <span>Order total</span>
+        <b id="checkout-total">₦0</b>
+      </div>
+
+      <p class="privacy-note">
+        Submitting this form sends your order details to PHONISTIC.
+        Payment arrangements will be confirmed with you; this checkout does not charge your card.
+      </p>
+
+      <button id="place-order" class="primary-button full-width" type="submit">
+        Place order →
+      </button>
+      <p id="checkout-error" class="form-error hidden"></p>
+    </form>
+  </section>
+
+  <section id="success-modal" class="modal success-modal hidden"
+    role="dialog" aria-modal="true" aria-labelledby="success-title">
+    <button class="close-button success-close" data-close aria-label="Close">×</button>
+    <div class="success-icon">✓</div>
+    <p class="eyebrow">ORDER RECEIVED</p>
+    <h2 id="success-title">Thank you for shopping with us!</h2>
+    <p>Your order reference is <b id="order-reference"></b>.</p>
+    <p>Keep your phone nearby so PHONISTIC can contact you about delivery and payment.</p>
+    <button class="primary-button full-width" data-close>Continue shopping</button>
+  </section>
+</body>
+</html>
